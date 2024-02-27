@@ -25,7 +25,7 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
 type TStats = {
-  dailyRevenue?: GetListResponse<IChartDatum>;
+  dailyRevenue?: GetListResponse<IChartDatum> | any;
   dailyOrders?: GetListResponse<IChartDatum>;
   newCustomers?: GetListResponse<IChartDatum>;
   total?: any;

@@ -102,12 +102,6 @@ export const Dashboard: React.FC = () => {
 
     return (
         <>
-            {/* <Stats
-                dailyRevenue={dailyRevenue}
-                dailyOrders={dailyOrders}
-                newCustomers={newCustomers}
-            /> */}
-            {/* <TabView tabs={tabs} /> */}
             <LineChart  dailyRevenue={memoizedRevenueData}
                 dailyOrders={memoizedOrdersData}
                 newCustomers={memoizedNewCustomersData} 
