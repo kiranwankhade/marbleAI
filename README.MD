@@ -40,7 +40,7 @@ The assignment has been implemented following best architectural and coding prac
 
 ### Screenshots:
 
-Screenshots of the running web application can be found in the repository for reference.
+![MA1](https://github.com/kiranwankhade/marbleAI/assets/49937312/7c841bc8-1759-4f2d-8e49-8b77657090b8)
 
 ### Instructions:
 
