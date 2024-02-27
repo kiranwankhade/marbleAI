@@ -223,7 +223,8 @@ const LineChart = ({
   return (
     <div className="line-chart p-2 bg-white border rounded-lg">
      <div className="mb-3">
-        <button onClick={openModal}>Open Date Range Picker</button>
+        {showChart ? <button className="text-md text-white font-bold bg-gray-500 rounded-lg p-2" onClick={openModal}>Select Date Range</button> :""}
+       
         {/* Modal for Date Range Picker */}
         <Modal
           isOpen={showModal}
