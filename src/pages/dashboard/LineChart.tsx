@@ -10,8 +10,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { ChartTooltip } from "../../components/dashboard/ChartTooltip";
-import { Menu } from "@headlessui/react";
 
 import { FaPencilAlt, FaChartLine } from "react-icons/fa";
 
@@ -39,18 +37,25 @@ const LineChart = ({
   newCustomers,
   total,
 }: TStats) => {
+
+  // Showing bg colors toggle
   const [showbg1, setShowbg1] = useState(false);
   const [showbg2, setShowbg2] = useState(false);
   const [showbg3, setShowbg3] = useState(false);
 
+  // Showing Options toggle on click of edit
   const [showOptions1, setShowOptions1] = useState(false);
   const [showOptions2, setShowOptions2] = useState(false);
   const [showOptions3, setShowOptions3] = useState(false);
   const [showOptions4, setShowOptions4] = useState(false);
 
+  // Showing chart toggle on click of arrow
   const [showChart, setShowChart] = useState(true);
-  const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
 
+  // Showing modal
+  const [showModal, setShowModal] = useState(false); 
+
+  //Modal functions
   const openModal = () => {
     setShowModal(true);
   };
@@ -59,6 +64,8 @@ const LineChart = ({
     setShowModal(false);
   };
 
+
+  // Date picker State
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
@@ -67,10 +74,12 @@ const LineChart = ({
     },
   ]);
 
+  //Date Picker Functions
   const handleDateRangeChange = (ranges: any) => {
     setSelectedDateRange([ranges.selection]);
   };
 
+  //data filter on basis of date
   const filteredRevenueData = dailyRevenue?.filter((item: any) => {
     const date = new Date(item.date);
     return (
@@ -159,6 +168,7 @@ const LineChart = ({
    const filteredConversionRate = filteredTotalOrders / filteredOnlineStoreSessions;
 
 
+  // Functions on Click of edit
   const handlePencilClick = (divNumber: Number) => {
     if (divNumber === 1) {
       setShowOptions1(!showOptions1);
@@ -266,20 +276,20 @@ const LineChart = ({
             <h3 className="text-base font-semibold underline decoration-dashed underline-offset-4 decoration-gray-300">
               Online Store Sessions
             </h3>
-            <div className="rounded-md p-2 text-l cursor-pointer text-gray-500 hover:bg-gray-300">
+            <div className="rounded-md p-2 text-l cursor-pointer text-gray-500 hover:bg-gray-300" onClick={() => handlePencilClick(1)}>
               <FaPencilAlt
                 // className={` ${showbg1 ? "opacity-100" : "opacity-0"}`}
-                onClick={() => handlePencilClick(1)}
+                
               />
             </div>
           </div>
           <div className="flex items-center gap-0.2 justify-around ">
-            <h3 className="text-base font-bold">{selectedDateRange == 0 ? onlineStoreSessions : filteredOnlineStoreSessions}</h3>
+            <h3 className="text-base font-bold">{selectedDateRange.length == 0 ? onlineStoreSessions : filteredOnlineStoreSessions}</h3>
             <IoMdArrowDropup className="text-sm" />
             <h3 className="text-sm text-gray-400">9%</h3>
           </div>
           {showOptions1 && (
-            <div className="w-1/4 absolute z-50 top-44 left-72 bg-white border rounded-md shadow-md">
+            <div className="w-1/4 absolute z-50 top-56 left-72 bg-white border rounded-md shadow-md">
               <div className="p-2" ref={optionsRef}>
                 {options.map((option, index) => (
                   <div
@@ -334,7 +344,7 @@ const LineChart = ({
           </div>
 
           <div className="flex items-center gap-0.2">
-            <h2 className="text-l font-bold">{selectedDateRange == 0 ? `$ ${netReturnValue}` : `$ ${filteredTNetReturnValue}`}</h2>,
+            <h2 className="text-l font-bold">{selectedDateRange.length == 0 ? `$ ${netReturnValue}` : `$ ${filteredTNetReturnValue}`}</h2>,
             <IoMdArrowDropup className="text-sm" />
             <h3 className="text-sm text-gray-400">14%</h3>
           </div>
@@ -393,7 +403,7 @@ const LineChart = ({
           </div>
 
           <div className="flex items-center gap-0.2">
-            <h2 className="text-l font-bold">{selectedDateRange == 0  ? totalOrders : filteredTotalOrders}</h2>,
+            <h2 className="text-l font-bold">{selectedDateRange.length == 0  ? totalOrders : filteredTotalOrders}</h2>,
             <IoMdArrowDropup className="text-sm" />
             <h3 className="text-sm text-gray-400">2%</h3>
           </div>
@@ -455,7 +465,7 @@ const LineChart = ({
 
           <div className="flex items-center gap-0.2">
             <h2 className="text-l font-bold ">
-              {selectedDateRange == 0  ? conversionRate.toFixed(2) : filteredConversionRate.toFixed(2)}
+              {selectedDateRange.length == 0  ? conversionRate.toFixed(2) : filteredConversionRate.toFixed(2)}
               {"%"}
             </h2>
             ,
@@ -511,7 +521,7 @@ const LineChart = ({
 
       {showChart ? (
         <div className=" p-3 m-2">
-          {selectedDateRange == 0 ? (
+          {selectedDateRange.length == 0 ? (
             <ResponsiveContainer height={400}>
               <AreaChart
                 data={dailyRevenue}
