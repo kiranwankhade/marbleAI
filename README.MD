@@ -1,69 +1,60 @@
-<div align="center" style="margin: 30px;">
+# Assignment README
 
-![Cover Image](https://refine.ams3.cdn.digitaloceanspaces.com/blog/2023-09-06-daisy-ui-panel/daisyui.jpg "Cover Image")
+## Web Application Development
 
+This repository contains the implementation of a web application feature as part of an assignment. The goal is to utilize the provided template and integrate a comparison feature for selected metrics in two different time periods. Additionally, there is an option to include a date range picker to allow users to customize the time periods for comparison.
 
-<br />
-<br />
+### Features Implemented:
 
-<div align="center">
-    <a href="https://refine.dev">Home Page</a> |
-    <a href="https://discord.gg/refine">Discord</a> |
-    <a href="https://refine.dev/examples/">Examples</a> | 
-    <a href="https://refine.dev/blog/">Blog</a> | 
-    <a href="https://refine.dev/docs/">Documentation</a>
-</div>
-</div>
+1. **Metric Comparison Panel**: Replaces or edits the existing charts panel in the provided template to display the comparison of selected metrics in two time periods.
 
-<br />
+2. **Date Range Picker**: Optionally, a date range picker is included at the top of the panel, enabling users to select periods for comparison.
 
-<div align="center"><strong>Build your <a href="https://reactjs.org/">React</a>-based CRUD applications, without constraints.</strong><br>An open source, headless web application framework developed with flexibility in mind.
+### Mock Data:
 
-<br />
-<br />
+The assignment utilizes mock data provided within the template. However, modifications or additions to the mock data can be made as needed for the assignment.
 
-[![Discord](https://img.shields.io/discord/837692625737613362.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/refine)
-[![Twitter Follow](https://img.shields.io/twitter/follow/refine_dev?style=social)](https://twitter.com/refine_dev)
+### Figma Design Reference:
 
-<a href="https://www.producthunt.com/posts/refine-3?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-refine&#0045;3" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=362220&theme=light&period=daily" alt="refine - 100&#0037;&#0032;open&#0032;source&#0032;React&#0032;framework&#0032;to&#0032;build&#0032;web&#0032;apps&#0032;3x&#0032;faster | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+The design prototype for the component to be created/integrated can be found in the provided Figma link. [Figma Design: Figma, Prototype](https://www.figma.com/)
 
-</div>
+### Tech Stack:
 
+- **React**: Utilized for building the frontend components and managing the UI.
+- **@refinedev/core**: Library used for CRUD operations and data management.
+- **dayjs**: Dependency for date manipulation and formatting.
+- **recharts**: Used for rendering responsive and customizable charts within the application.
+- **react-icons**: Provides access to a library of icons for UI elements.
+- **react-date-range**: Component utilized for implementing the date range picker functionality.
+- **Modal**: Component for displaying modal dialogs in the application.
 
-## About
+## Implementation Details:
 
-This example provides a great starting point to learn how to build a full-fledged admin panel by integrating [**daisyUI**](https://daisyui.com) with [**refine**](https://github.com/refinedev/refine)
+The assignment has been implemented following best architectural and coding practices. The UI is designed to be bug-free and match the look and feel of the provided design in the Figma link. 
 
-**daisyUI** is a TailwinCSS based component templates library. It provides shorter, semantic class names composed from regular TailwindCSS classes that also come with responsive, color, size and shape variants. As such, daisyUI offers the convenience of using friendly class names to style markups while beautifying React code. On top of these, daisyUI classes can be overridden and extented. Besides, it lets us use regular TailwindCSS classes as well. In this example, you'll discover how to use daisyUI templates to style React components.
+### Components:
 
-refine is a React-based powerful framework for building low-code applications. It is primarily focused on implementing data-heavy apps such as internal tools, dashboards, admin panels, and storefronts. It comes with a core package that segregates app concerns like data handling, authentication, access control, etc., into React contexts. It also supports integration with industry standard backend systems such and UI frameworks. It is highly customizable and extensible. In this example, you get an opportunity to learn how to integrate **daisyUI** with **refine** for building an admin panel app.
+1. **Dashboard Component**: This component serves as the main dashboard interface, displaying the comparison panels and other relevant information.
 
-Refer to the complete tutorial of this app [here.](https://refine.dev/blog/daisy-ui-react-admin-panel/)
+2. **LineChart Component**: Handles the rendering of line charts for the selected metrics. It also includes the functionality for the date range picker and options editing.
 
-## Quick Start
+### Screenshots:
 
-Run the following command to download the project:
+Screenshots of the running web application can be found in the repository for reference.
 
-```
-npm create refine-app@latest -- --example blog-refine-daisyui
-```
+### Instructions:
 
-Once the setup is complete, navigate to the project folder and start your project with:
+To run the web application:
 
-```
-npm run dev
-```
+1. Clone the repository to your local machine.
+2. Navigate to the project directory.
+3. Install dependencies using `npm install` or `yarn install`.
+4. Start the development server using `npm start` or `yarn start`.
+5. Access the application in your web browser at the specified URL.
 
-Your application will be accessible at http://localhost:5173
+## Notes:
 
-![Dashboard Page](https://refine.ams3.cdn.digitaloceanspaces.com/blog/2023-09-06-daisy-ui-panel/dash-1.png "Dashboard Page")
+Please refer to the documentation within the codebase for detailed explanations of implementation decisions, assumptions made, and additional instructions for running and using the web application.
 
-![Product List Page](https://refine.ams3.cdn.digitaloceanspaces.com/blog/2023-09-06-daisy-ui-panel/dash-2.png "Product List Page")
+For any further inquiries or assistance, feel free to contact the repository owner.
 
-![Product Edit Page](https://refine.ams3.cdn.digitaloceanspaces.com/blog/2023-09-06-daisy-ui-panel/dash-3.png "Product Edit Page")
-
-### Resources
-
-Refer to [daisyUI docs](https://daisyui.com/docs/install/) for more information.
-
-Refer to complete CRUD app [tutorial](https://refine.dev/docs/tutorial/introduction/index/) to learn more about refine.
