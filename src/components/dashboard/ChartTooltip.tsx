@@ -9,6 +9,7 @@ export const ChartTooltip = ({
 }: any) => {
     if (active && payload && payload.length) {
         const dataPoint = payload[0].payload;
+        // console.log('dataPoint:', dataPoint)
 
         const tooltipStyle = {
             left: coordinate.x, // Adjust positioning

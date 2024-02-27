@@ -25,6 +25,7 @@ export const ResponsiveBarChart = ({
     data,
     colors,
 }: TResponsiveBarChartProps) => {
+    console.log('data:', data)
     return (
         <ResponsiveContainer height={400}>
             <BarChart
