@@ -100,6 +100,10 @@ export const Dashboard: React.FC = () => {
         },
     ];
 
+    
+
+
+
     return (
         <>
             <LineChart  dailyRevenue={memoizedRevenueData}
