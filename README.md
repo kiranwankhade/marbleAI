@@ -83,7 +83,7 @@ The assignment has been implemented following best architectural and coding prac
 ### Screenshots:
 
 1. **Initialize**
-![MA2](https://github.com/kiranwankhade/marbleAI/assets/49937312/53226be4-68b3-4c5a-9b8c-3e5316c52a5b)
+![MA8](https://github.com/kiranwankhade/marbleAI/assets/49937312/9cfba400-5a63-4b15-91e6-470453122df1)
 
 2. **Data Fetch**
 ![MA3](https://github.com/kiranwankhade/marbleAI/assets/49937312/e0606ca8-05db-40f4-a96d-06a6d693d7a6)
