@@ -86,15 +86,19 @@ The assignment has been implemented following best architectural and coding prac
 ![MA8](https://github.com/kiranwankhade/marbleAI/assets/49937312/9cfba400-5a63-4b15-91e6-470453122df1)
 
 2. **Data Fetch**
-![MA3](https://github.com/kiranwankhade/marbleAI/assets/49937312/e0606ca8-05db-40f4-a96d-06a6d693d7a6)
+![MA9](https://github.com/kiranwankhade/marbleAI/assets/49937312/1bcb9120-5196-4602-a497-78f98d99d19c)
+
 
 ![MA4](https://github.com/kiranwankhade/marbleAI/assets/49937312/5396ed19-144e-4c2f-a4a3-05086a0dc475)
 
 3. **Date Picker**
-![MA5](https://github.com/kiranwankhade/marbleAI/assets/49937312/ac778c5b-5f7f-4566-87b7-e59f7cecc2a9)
 
-4. **After Date Seleted**
-![MA6](https://github.com/kiranwankhade/marbleAI/assets/49937312/e69352bb-2a8e-4777-80e9-21f2dd2a2f31)
+![MA10](https://github.com/kiranwankhade/marbleAI/assets/49937312/7e3ca7ad-7646-40a8-a225-9194bf1cdd69)
+
+
+
+4. **After Date Selected**
+
 
 ![MA7](https://github.com/kiranwankhade/marbleAI/assets/49937312/63746689-1739-4c5d-9829-cf6ba7b34e62)
 
