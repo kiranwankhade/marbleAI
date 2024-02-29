@@ -28,7 +28,7 @@ import {
     CategoryShow,
 } from "./pages/categories";
 import { HomeIcon, ShoppingCartIcon, TagIcon } from "@heroicons/react/20/solid";
-import { Dashboard } from "./pages/dashboard";
+import { Dashboard } from "./pages/dashboard_Figma";
 
 function App() {
     return (

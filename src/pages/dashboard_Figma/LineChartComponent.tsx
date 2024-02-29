@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { GetListResponse } from "@refinedev/core";
-import { IChart, IChartDatum } from "../../interfaces";
 import {
   AreaChart,
   Area,
@@ -9,6 +7,9 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  LineChart,
+  Line,
+  Legend,
 } from "recharts";
 
 import { FaPencilAlt, FaChartLine } from "react-icons/fa";
@@ -19,28 +20,22 @@ import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 
 import { BsQuestionCircle } from "react-icons/bs";
 
-import { DateRangePicker } from "react-date-range";
 import Modal from "react-modal";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
-
-import { Bars } from "react-loader-spinner";
 import CustomTooltip from "./CustomTooltip";
+import MonthRangePicker from "./MonthRangePicker";
+import DatesRange from "./DatesRange";
+import Skeleton from "./Skeleton";
 
 type TStats = {
-  dailyRevenue?: GetListResponse<IChartDatum> | any;
-  dailyOrders?: GetListResponse<IChartDatum>;
-  newCustomers?: GetListResponse<IChartDatum>;
-  total?: any;
+  year2021?: [] | any;
+  year2023?: [] | any;
+  year2022?: [] | any;
 };
 
-const LineChart = ({
-  dailyRevenue,
-  dailyOrders,
-  newCustomers,
-  total,
-}: TStats) => {
+const LineChartComponent = ({ year2021, year2023, year2022 }: TStats) => {
   // State to track loading state
   const [loading, setLoading] = useState(true);
 
@@ -55,14 +50,21 @@ const LineChart = ({
   const [showOptions3, setShowOptions3] = useState(false);
   const [showOptions4, setShowOptions4] = useState(false);
 
-  // Date picker State
-  const [selectedDateRange, setSelectedDateRange] = useState([
+  const startDate2023 = new Date("2023-01-01");
+  const endDate2023 = new Date("2023-12-31");
+  const initialSelectedDateRange = [
     {
-      startDate: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-      endDate: new Date(),
+      startDate: startDate2023,
+      endDate: endDate2023,
       key: "selection",
     },
-  ]);
+  ];
+
+  // Date picker State
+  const [selectedDateRange, setSelectedDateRange] = useState(
+    initialSelectedDateRange
+  );
+  console.log("selectedDateRange:", selectedDateRange);
 
   // Showing chart toggle on click of arrow
   const [showChart, setShowChart] = useState(true);
@@ -76,112 +78,130 @@ const LineChart = ({
   };
 
   const closeModal = () => {
-    setSelectedDateRange([
-      {
-        startDate: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-        endDate: new Date(),
-        key: "selection",
-      },
-    ]);
+    setSelectedDateRange(initialSelectedDateRange);
+    combinedFilteredData.length === 0;
     setShowModal(false);
+  };
+
+  const [startMonth, setStartMonth] = useState("");
+  const [endMonth, setEndMonth] = useState("");
+
+  const handleMonthRangeChange = ({
+    startMonth,
+    endMonth,
+  }: {
+    startMonth: string;
+    endMonth: string;
+  }) => {
+    setStartMonth(startMonth);
+    setEndMonth(endMonth);
+  };
+
+  const filterDataByMonthRange = (data: any[]) => {
+    return data.filter((item) => {
+      const date = new Date(item.date);
+      const start = new Date(startMonth);
+      const end = new Date(endMonth);
+      return date >= start && date <= end;
+    });
   };
 
   const submit = () => {
     setShowModal(false);
   };
 
-  //Date Picker Functions
-  const handleDateRangeChange = (ranges: any) => {
-    setSelectedDateRange([ranges.selection]);
+  // Function to calculate total value
+  const calculateTotalCustmers = (data: any) => {
+    return data?.reduce((acc: any, item: any) => acc + item.newCustomers, 0);
   };
 
-  //data filter on basis of date
-  const filteredRevenueData = dailyRevenue?.filter((item: any) => {
-    const date = new Date(item.date);
-    return (
-      date >= selectedDateRange[0].startDate &&
-      date <= selectedDateRange[0].endDate
-    );
-  });
-
-  const filteredDailyOrdersData = dailyOrders?.filter((item: any) => {
-    const date = new Date(item.date);
-    return (
-      date >= selectedDateRange[0].startDate &&
-      date <= selectedDateRange[0].endDate
-    );
-  });
-
-  const filteredNewCustomersData = newCustomers?.filter((item: any) => {
-    const date = new Date(item.date);
-    return (
-      date >= selectedDateRange[0].startDate &&
-      date <= selectedDateRange[0].endDate
-    );
-  });
+  // Function to calculate total value
+  const calculateTotalOrders = (data: any) => {
+    return data?.reduce((acc: any, item: any) => acc + item.totalOrders, 0);
+  };
 
   // Function to calculate total value
-  const calculateTotal = (data: any) => {
-    return data?.reduce((acc: any, item: any) => acc + item.value, 0);
+  const calculateTotalValue = (data: any) => {
+    return data?.reduce(
+      (acc: any, item: any) => acc + item.total_month_amount,
+      0
+    );
   };
 
   // Calculate total values
-  const totalNewCustomers = calculateTotal(newCustomers);
-  const totalDailyOrders = calculateTotal(dailyOrders);
-  const totalDailyRevenue = calculateTotal(dailyRevenue);
+  const totalNewCustomers = calculateTotalCustmers(year2023);
+  const totalDailyOrders = calculateTotalOrders(year2023);
+  const totalDailyRevenue = calculateTotalValue(year2023);
 
   // Calculate net cost
   const totalExpenses = totalNewCustomers + totalDailyOrders;
   const netCosts = totalDailyRevenue - totalExpenses;
 
-  const totalRevenue: number = dailyRevenue?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const totalRevenue: number = year2023?.reduce(
+    (acc: Number, curr: any) => acc + curr?.total_month_amount,
     0
   );
 
   const netReturnValue = totalRevenue - netCosts;
 
-  const totalOrders = dailyOrders?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const totalOrders = year2023?.reduce(
+    (acc: Number, curr: any) => acc + curr?.totalOrders,
     0
   );
 
-  const onlineStoreSessions = newCustomers?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const onlineStoreSessions = year2023?.reduce(
+    (acc: Number, curr: any) => acc + curr?.total_month_amount,
     0
   );
 
-  const conversionRate = totalOrders / onlineStoreSessions;
+  const conversionRate = (totalOrders / onlineStoreSessions) * 100;
 
-  // Calculate filter total values
-  const filteredTotalNewCustomers = calculateTotal(filteredNewCustomersData);
-  const filteredTotalDailyOrders = calculateTotal(filteredDailyOrdersData);
-  const filteredTotalDailyRevenue = calculateTotal(filteredDailyOrdersData);
+  // Filter data for both years and combine them
+  const filteredYear2023Data = filterDataByMonthRange(year2023);
+  const filteredYear2022Data = filterDataByMonthRange(year2022);
+  const filteredYear2021Data = filterDataByMonthRange(year2021);
+  const combinedFilteredData = [
+    ...filteredYear2021Data,
+    ...filteredYear2022Data,
+    ...filteredYear2023Data,
+  ];
+  console.log("combinedFilteredData:", combinedFilteredData);
+
+  // Calculate total values
+  const combinedTotalNewCustomers =
+    calculateTotalCustmers(combinedFilteredData);
+  const combinedTotalDailyOrders = calculateTotalOrders(combinedFilteredData);
+  const combinedTotalDailyRevenue = calculateTotalValue(combinedFilteredData);
 
   // Calculate net cost
-  const filteredTotalExpenses =
-    filteredTotalNewCustomers + filteredTotalDailyOrders;
-  const filteredNetCosts = filteredTotalDailyRevenue - filteredTotalExpenses;
+  const combinedTotalExpenses =
+    combinedTotalNewCustomers + combinedTotalDailyOrders;
+  const combinedNetCosts = combinedTotalDailyRevenue - combinedTotalExpenses;
 
-  const filteredTotalRevenue: number = dailyRevenue?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const combinedTotalRevenue: number = combinedFilteredData?.reduce(
+    (acc: Number, curr: any) => acc + curr?.total_month_amount,
     0
   );
 
-  const filteredTNetReturnValue = filteredTotalRevenue - filteredNetCosts;
+  const combinedNetReturnValue = combinedTotalRevenue - combinedNetCosts;
+  console.log("combinedNetReturnValue:", combinedNetReturnValue);
 
-  const filteredTotalOrders = filteredDailyOrdersData?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const combinedTotalOrders = year2023?.reduce(
+    (acc: Number, curr: any) => acc + curr?.totalOrders,
     0
   );
 
-  const filteredOnlineStoreSessions = filteredNewCustomersData?.reduce(
-    (acc: Number, curr: any) => acc + curr?.value,
+  const combinedOnlineStoreSessions = year2023?.reduce(
+    (acc: Number, curr: any) => acc + curr?.total_month_amount,
     0
   );
 
-  const filteredConversionRate =
-    filteredTotalOrders / filteredOnlineStoreSessions;
+  console.log("combinedTotalOrders:", combinedTotalOrders);
+  const combinedConversionRate =
+    (combinedTotalOrders / combinedOnlineStoreSessions) * 100;
+  console.log("combinedConversionRate:", combinedConversionRate);
+
+  console.log("combinedOnlineStoreSessions:", combinedOnlineStoreSessions);
 
   // Functions on Click of edit
   const handlePencilClick = (divNumber: Number) => {
@@ -258,17 +278,9 @@ const LineChart = ({
   return (
     <div className="line-chart p-2 bg-white border rounded-lg">
       {loading ? (
-         // Render loading
+        // Render loading
         <div className="flex w-full items-center justify-center">
-          <Bars
-            height="150"
-            width="150"
-            color="#208080"
-            ariaLabel="bars-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
+          <Skeleton/>
         </div>
       ) : (
         <>
@@ -294,9 +306,9 @@ const LineChart = ({
               </div>
               <div className="flex items-center gap-0.2 justify-around ">
                 <h3 className="text-base font-bold">
-                  {selectedDateRange.length == 0
-                    ? onlineStoreSessions
-                    : filteredOnlineStoreSessions}
+                  {combinedFilteredData.length == 0
+                    ? onlineStoreSessions || 0
+                    : combinedOnlineStoreSessions || 0}
                 </h3>
                 <IoMdArrowDropup className="text-sm" />
                 <h3 className="text-sm text-gray-400">9%</h3>
@@ -358,9 +370,9 @@ const LineChart = ({
 
               <div className="flex items-center gap-0.2">
                 <h2 className="text-l font-bold">
-                  {selectedDateRange.length == 0
+                  {combinedFilteredData.length == 0
                     ? `$ ${netReturnValue}`
-                    : `$ ${filteredTNetReturnValue}`}
+                    : `$ ${combinedNetReturnValue}`}
                 </h2>
                 ,
                 <IoMdArrowDropup className="text-sm" />
@@ -422,9 +434,9 @@ const LineChart = ({
 
               <div className="flex items-center gap-0.2">
                 <h2 className="text-l font-bold">
-                  {selectedDateRange.length == 0
+                  {combinedFilteredData.length == 0
                     ? totalOrders
-                    : filteredTotalOrders}
+                    : combinedTotalOrders}
                 </h2>
                 ,
                 <IoMdArrowDropup className="text-sm" />
@@ -488,9 +500,9 @@ const LineChart = ({
 
               <div className="flex items-center gap-0.2">
                 <h2 className="text-l font-bold ">
-                  {selectedDateRange.length == 0
+                  {combinedFilteredData.length == 0
                     ? conversionRate.toFixed(2)
-                    : filteredConversionRate.toFixed(2)}
+                    : combinedConversionRate.toFixed(2)}
                   {"%"}
                 </h2>
                 ,
@@ -545,11 +557,11 @@ const LineChart = ({
           </div>
 
           {showChart ? (
-            <div className="p-3 m-2">
-              {selectedDateRange.length == 0 ? (
-                <ResponsiveContainer height={350}>
-                  <AreaChart
-                    data={dailyRevenue}
+            <div className="p-1 m-1">
+              {combinedFilteredData.length === 0 ? (
+                <ResponsiveContainer height={300}>
+                  <LineChart
+                    data={year2023}
                     height={400}
                     margin={{
                       top: 10,
@@ -561,7 +573,7 @@ const LineChart = ({
                     <CartesianGrid strokeDasharray="0 0 0" />
                     <XAxis
                       dataKey="date"
-                      tickCount={dailyRevenue?.length ?? 0}
+                      tickCount={year2023?.length ?? 0}
                       tick={{
                         stroke: "light-grey",
                         strokeWidth: 0.5,
@@ -572,8 +584,8 @@ const LineChart = ({
                       tickCount={3}
                       tickFormatter={(tick) => {
                         if (tick === 0) return "0";
-                        if (tick === 1000) return "20k";
-                        if (tick === 2000) return "40k";
+                        if (tick === 20000) return "20k";
+                        if (tick === 40000) return "40k";
                         return tick;
                       }}
                       tick={{
@@ -582,21 +594,49 @@ const LineChart = ({
                         fontSize: "12px",
                       }}
                       interval="preserveStartEnd"
-                      domain={[0, 2000]} // Adjusted domain to include 0, 1k, and 2k
+                      domain={[0, 40000]} // Adjusted domain to include 0, 1k, and 2k
                     />
 
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      strokeWidth={3}
-                      fill="none"
+                    <Tooltip
+                       content={<CustomTooltip data={[
+                        ...year2022,
+                        ...year2023,
+                      ]} />}
+                       wrapperStyle={{
+                         backgroundColor: "#fff",
+                         border: "1px solid #e2e8f0",
+                         borderRadius: "0.5rem",
+                         padding: "0.5rem",
+                         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                       }}
                     />
-                  </AreaChart>
+
+                      <Legend content={<DatesRange data={[
+                        ...year2022,
+                        ...year2023,
+                      ]} />} />
+
+                    <Line
+                      type="monotone"
+                      dataKey="sale_cost"
+                      strokeWidth={5}
+                      fill="none"
+                      dot={false}
+                    />
+                    <Line
+                      type="basis"
+                      dataKey="production_cost"
+                      strokeWidth={3}
+                      stroke="#6FC2F3"
+                      strokeDasharray="3 4 5 2"
+                      dot={false}
+                    />
+                  </LineChart>
                 </ResponsiveContainer>
               ) : (
-                <ResponsiveContainer height={350}>
-                  <AreaChart
-                    data={filteredRevenueData}
+                <ResponsiveContainer height={300}>
+                  <LineChart
+                    data={combinedFilteredData}
                     height={400}
                     margin={{
                       top: 10,
@@ -608,7 +648,7 @@ const LineChart = ({
                     <CartesianGrid strokeDasharray="0 0 0" />
                     <XAxis
                       dataKey="date"
-                      tickCount={filteredRevenueData?.length ?? 0}
+                      tickCount={combinedFilteredData?.length ?? 0}
                       tick={{
                         stroke: "light-grey",
                         strokeWidth: 0.5,
@@ -619,32 +659,51 @@ const LineChart = ({
                       tickCount={3}
                       tickFormatter={(tick) => {
                         if (tick === 0) return "0";
-                        if (tick === 1000) return "20k";
-                        if (tick === 2000) return "40k";
+                        if (tick === 20000) return "20k";
+                        if (tick === 40000) return "40k";
                         return tick;
                       }}
                       tick={{
                         stroke: "light-grey",
-                        strokeWidth: 0.5,
+                        strokeWidth: 1,
                         fontSize: "12px",
                       }}
                       interval="preserveStartEnd"
-                      domain={[0, 2000]} // Adjusted domain to include 0, 1k, and 2k
+                      domain={[0, 40000]} // Adjusted domain to include 0, 20k, and 40k
                     />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Area
+                   <Tooltip
+                       content={<CustomTooltip data={[...year2023,...year2022,...year2021]} />}
+                       wrapperStyle={{
+                         backgroundColor: "#fff",
+                         border: "1px solid #e2e8f0",
+                         borderRadius: "0.5rem",
+                         padding: "0.5rem",
+                         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                       }}
+                    />
+
+                    <Legend content={<DatesRange data={combinedFilteredData}  />} />
+                    <Line
                       type="monotone"
-                      dataKey="value"
+                      dataKey="sale_cost"
                       strokeWidth={3}
                       fill="none"
+                      dot={false}
                     />
-                  </AreaChart>
+                    <Line
+                      type="basis"
+                      dataKey="production_cost"
+                      strokeWidth={3}
+                      stroke="#6FC2F3"
+                      strokeDasharray="3 4 5 2"
+                      fill="none"
+                      dot={false}
+                    />
+                  </LineChart>
                 </ResponsiveContainer>
               )}
             </div>
-          ) : (
-            ""
-          )}
+          ) : <></>}
 
           <div className="p-3 m-1.5 mt-0 text-right">
             {showChart ? (
@@ -676,12 +735,11 @@ const LineChart = ({
               }}
             >
               <div className="flex justify-end">
-                <button onClick={closeModal}>Close</button>
+                <button className="text-xl p-3" onClick={closeModal}>
+                  X
+                </button>
               </div>
-              <DateRangePicker
-                ranges={selectedDateRange}
-                onChange={handleDateRangeChange}
-              />
+              <MonthRangePicker onChange={handleMonthRangeChange} />
               <div className="flex justify-end">
                 <button onClick={submit}>Submit</button>
               </div>
@@ -693,4 +751,4 @@ const LineChart = ({
   );
 };
 
-export default LineChart;
+export default LineChartComponent;

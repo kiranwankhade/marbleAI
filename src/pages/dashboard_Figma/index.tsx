@@ -7,7 +7,8 @@ import { ResponsiveBarChart } from "../../components/dashboard/ResponsiveBarChar
 import { TabView } from "../../components/dashboard/TabView";
 import { RecentSales } from "../../components/dashboard/RecentSales";
 import { IChartDatum, TTab } from "../../interfaces";
-import LineChart from "./LineChart";
+import LineChartComponent from "./LineChartComponent";
+import {  year2021, year2022, year2023 } from "./data";
 
 const filters: CrudFilter[] = [
     {
@@ -100,16 +101,15 @@ export const Dashboard: React.FC = () => {
         },
     ];
 
-    
+
 
 
 
     return (
         <>
-            <LineChart  dailyRevenue={memoizedRevenueData}
-                dailyOrders={memoizedOrdersData}
-                newCustomers={memoizedNewCustomersData} 
-                total={dailyRevenue?.total}
+            <LineChartComponent  year2021={year2021}
+            year2023={year2023}
+                year2022={year2022}
                 />
             <RecentSales />
         </>
